@@ -88,17 +88,9 @@ def plot_radar(df, classes, year, good=True, bad=True, average=False):
     fig.update_layout(
         polar=dict(
             radialaxis=dict(
-              visible=True,
-              range=[0, 2]
+              visible=True
         )),
       showlegend=True
     )
 
     fig.show()
-
-
-# In[ ]:
-
-
-
-
