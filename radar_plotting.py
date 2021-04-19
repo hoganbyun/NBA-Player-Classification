@@ -24,12 +24,58 @@ bad_2020 = ['MIN', 'DET', 'ORL', 'HOU', 'WAS', 'CLE', 'TOR', 'OKC']
 # year refers to the season you want to look at and good/bad/average give you the option of which teams you want
 # shown on the radar plot
 
-def plot_radar(df, classes, year, good=True, bad=True, average=False):
-    top_5_df = pd.DataFrame(df.groupby('TEAM')['MIN'].nlargest()).reset_index()['level_1']
-    
-    temp = df.merge(top_5_df, left_index=True, right_on='level_1', how='inner').reset_index(drop=True)
+def plot_radar(df, classes, year=0, good=True, bad=True, average=False):
 
-    if year == 2015:
+    if year == 0:
+        top_5_df = pd.DataFrame(df_2015.groupby('TEAM')['MIN'].nlargest()).reset_index()['level_1']
+    
+        temp = df_2015.merge(top_5_df, left_index=True, right_on='level_1', how='inner').reset_index(drop=True)
+        good_df = pd.DataFrame(df_2015[df_2015['TEAM'].isin(good_2015)]['Class'].value_counts().sort_index())
+        good_df['Class'] = good_df['Class'] / 8
+        good_df = good_df.drop(0)
+
+        bad_df = pd.DataFrame(df_2015[df_2015['TEAM'].isin(bad_2015)]['Class'].value_counts().sort_index())
+        bad_df['Class'] = bad_df['Class'] / 8
+        bad_df = bad_df.drop(0)
+    
+        avg_df = temp.drop(temp[temp['TEAM'].isin(good_2015 + bad_2015)].index)['Class'].value_counts().sort_index()
+        avg_df = avg_df / 14
+        avg_df = avg_df.drop(0)
+        
+        for good_teams,bad_teams, df in zip([good_2016,good_2017,good_2018,good_2019,good_2020],
+                       [bad_2016,bad_2017,bad_2018,bad_2019,bad_2020],
+                          [df_2016, df_2017, df_2018, df_2019, df_2020]):
+            
+            top_5_df = pd.DataFrame(df.groupby('TEAM')['MIN'].nlargest()).reset_index()['level_1']
+    
+            temp = df.merge(top_5_df, left_index=True, right_on='level_1', how='inner').reset_index(drop=True)
+            
+            #good_df_temp = pd.DataFrame(temp[temp['TEAM'].isin(good_teams)]['Class'].value_counts().sort_index())
+            good_df_temp = pd.DataFrame(temp[temp['TEAM'].isin(good_teams)]['Class'].value_counts().reindex(
+                df.Class.unique(),fill_value=0).sort_index())
+            good_df_temp['Class'] = good_df_temp['Class'] / 8
+            good_df_temp = good_df_temp.drop(0)
+            good_df['Class'] += good_df_temp['Class']
+            
+            #bad_df_temp = pd.DataFrame(temp[temp['TEAM'].isin(bad_teams)]['Class'].value_counts().sort_index())
+            bad_df_temp = pd.DataFrame(temp[temp['TEAM'].isin(bad_teams)]['Class'].value_counts().reindex(
+                df.Class.unique(),fill_value=0).sort_index())
+            bad_df_temp['Class'] = bad_df_temp['Class'] / 8
+            bad_df_temp = bad_df_temp.drop(0)
+            bad_df['Class'] += bad_df_temp['Class']
+            
+            #avg_df_temp = temp.drop(temp[temp['TEAM'].isin(good_teams + bad_teams)].index)['Class'].value_counts().sort_index()
+            avg_df_temp = temp.drop(temp[temp['TEAM'].isin(good_teams + bad_teams)].index)['Class'].value_counts().reindex(
+                df.Class.unique(),fill_value=0).sort_index()
+            avg_df_temp = avg_df_temp / 14
+            avg_df_temp = avg_df_temp.drop(0)
+            avg_df += avg_df_temp
+            
+        good_df['Class'] = good_df['Class'] / 6
+        bad_df['Class'] = bad_df['Class'] / 6
+        avg_df = avg_df / 6
+            
+    elif year == 2015:
         good_teams = good_2015
         bad_teams = bad_2015
     elif year == 2016:
@@ -50,17 +96,18 @@ def plot_radar(df, classes, year, good=True, bad=True, average=False):
     else:
         return "Please enter a year between 2015 and 2020, inclusive"
     
-    good_df = pd.DataFrame(temp[temp['TEAM'].isin(good_teams)]['Class'].value_counts().sort_index())
-    good_df['Class'] = good_df['Class'] / 8
-    good_df = good_df.drop(0)
+    if year > 0:
+        good_df = pd.DataFrame(temp[temp['TEAM'].isin(good_teams)]['Class'].value_counts().sort_index())
+        good_df['Class'] = good_df['Class'] / 8
+        good_df = good_df.drop(0)
 
-    bad_df = pd.DataFrame(temp[temp['TEAM'].isin(bad_teams)]['Class'].value_counts().sort_index())
-    bad_df['Class'] = bad_df['Class'] / 8
-    bad_df = bad_df.drop(0)
+        bad_df = pd.DataFrame(temp[temp['TEAM'].isin(bad_teams)]['Class'].value_counts().sort_index())
+        bad_df['Class'] = bad_df['Class'] / 8
+        bad_df = bad_df.drop(0)
     
-    avg_df = temp.drop(temp[temp['TEAM'].isin(good_teams + bad_teams)].index)['Class'].value_counts().sort_index()
-    avg_df = avg_df / 14
-    avg_df = avg_df.drop(0)
+        avg_df = temp.drop(temp[temp['TEAM'].isin(good_teams + bad_teams)].index)['Class'].value_counts().sort_index()
+        avg_df = avg_df / 14
+        avg_df = avg_df.drop(0)
     
     fig = go.Figure()
     
@@ -90,7 +137,7 @@ def plot_radar(df, classes, year, good=True, bad=True, average=False):
             radialaxis=dict(
               visible=True
         )),
-      showlegend=True
+    showlegend=True
     )
 
     fig.show()
