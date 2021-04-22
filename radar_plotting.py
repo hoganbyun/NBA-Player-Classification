@@ -26,6 +26,9 @@ bad_2020 = ['MIN', 'DET', 'ORL', 'HOU', 'WAS', 'CLE', 'TOR', 'OKC']
 
 def plot_radar(df, classes, year=0, good=True, bad=True, average=False):
 
+    top_5_df = pd.DataFrame(df.groupby('TEAM')['MIN'].nlargest()).reset_index()['level_1']
+    
+    temp = df.merge(top_5_df, left_index=True, right_on='level_1', how='inner').reset_index(drop=True)
     if year == 0:
         top_5_df = pd.DataFrame(df_2015.groupby('TEAM')['MIN'].nlargest()).reset_index()['level_1']
     
@@ -74,7 +77,7 @@ def plot_radar(df, classes, year=0, good=True, bad=True, average=False):
         good_df['Class'] = good_df['Class'] / 6
         bad_df['Class'] = bad_df['Class'] / 6
         avg_df = avg_df / 6
-            
+        
     elif year == 2015:
         good_teams = good_2015
         bad_teams = bad_2015
@@ -109,6 +112,9 @@ def plot_radar(df, classes, year=0, good=True, bad=True, average=False):
         avg_df = avg_df / 14
         avg_df = avg_df.drop(0)
     
+    if year == 0:
+        year = "2015-2020"
+        
     fig = go.Figure()
     
     if good:
@@ -137,7 +143,8 @@ def plot_radar(df, classes, year=0, good=True, bad=True, average=False):
             radialaxis=dict(
               visible=True
         )),
-    showlegend=True
+    showlegend=True,
+    title=f"{year} NBA Team Composition: Unsupervised Model"
+    #title=f"{year} NBA Team Composition: Semi-supervised Model"
     )
-
     fig.show()
