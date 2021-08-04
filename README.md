@@ -6,6 +6,8 @@ Author: Hogan Byun
 
 The game of basketball has certainly evolved over time. Point guards are no longer relagated to just passing duties, centers are no longer just tall players who post-up and rebound. As a result, classifying players by position starts to become less relevant as teams move into an era of "positionless" basketball, where players are asked to play and guard multiple positions. This project provides different ways to classify players into playstyles rather than the traditional five positions (PG, SG, SF, PF, C). Using these classifications, NBA teams can find a better understanding of the types of players that succesful teams have and unsuccessful teams lack. This can prove to be useful to teams that want to identify initial steps to improve their rosters.
 
+* This project has been updated in the "modeling pt 2" folder.
+
 ## The Data
 
 All the data has been curated from https://www.basketball-reference.com/ and https://www.nba.com/stats/
