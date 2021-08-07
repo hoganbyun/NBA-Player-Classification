@@ -47,21 +47,18 @@ In total, there were 3,067 player seasons used for this project. These players i
 ## Methods
 ### Semi-Supervised Learning
 
-This project analyzes NBA player statistics to claassify players into distinct playstyles/classes. Two methods were implemented in this project, semi-supervised and unsupervised learning. 
+This project analyzes NBA player statistics to claassify players into distinct playstyles/classes. This project used semi-supervised learning, which is a combination of unsupervised and supervised learning. Using k-means clustering, the players were separate into groups, after which, labels were given based on the average stats of each group.
 
-In **semi-supervised learning**, labels were predetermined, those being the following 11 playstyles:
-* **Pass-First Guard** - High assist rate, not a primary scorer, tends to be shorter in height
-* **Stretch Big** - Shoots 3-pointers and rebounds well, taller height
-* **Traditional Big** - High rebound and block rate, mainly shoots from close range
-* **Perimeter Scorer** - Shoots a lot of 3-pointers and makes them at an above average rate
-* **High Usage Big** - Big man with a high usage rate, scores a lot of points and is an above average facilitator
-* **Ball Dominant Scorer** - The "number 1" option on a team, go-to scorer who also handles the ball and runs the offense
-* **Athletic Slasher** - High drive and close shot rate, can shoot 3-pointers but does so at a below average level
-* **Volume Scorer** - Shoots a lot though not always efficiently, minimal contributions elsewhere
-* **Versatile Role Player** - Role player who contributes everywhere but does not excel in any area
-* **Role Player** - Does not have enough counting statistics to be classified somewhere
+Clustering showed that 6 groups provided the best balance of intra and inter cluster separation. Those being:
+* **Ball-Dominant Scorer** - "Best" player on a team, main contributor in anything offensive related
+* **Role Player** - Contributes but does not excel in any area
+* **Stretch Big** - Shoots more 3PT and drives in more than a traditional big in exchange for less rebounds
+* **Traditional Big** - Rebounds and blocks shots well, rarely shoots and almost exclusively takes shots inside
+* **Secondary Guard** - Drives and assists with above average 3PT shooting, shortest average height
+* **High-Usage Big** - Scores a lot, rebounds well, takes a lot of shots inside the paint at a high percentage
 
-These labels were manually applied to 352 players based on my own opinion. I made sure to have at least 30 and less than 40 of each playstyle in the 352 players. The model was trained on this data, after which, label predictions were made and applied to the remaining unlabeled players to create a fully-labeled dataset. Our final model was trained on that dataset. Several classification methods (Random Forest, XGBoost, SVM, etc.) were utilized and optimized to narrow down to a best-fit model, and on both occasions, XGBoost yielded the best results.
+Our final model was trained on the newly labeled data. Several classification methods (Random Forest, XGBoost, SVM, etc.) were utilized and optimized to narrow down to a best-fit model, the best results coming from neural networks.
+EDITED UP TO HERE
 
 ### Unsupervised Learning
 In **unsupervised learning**, players were not labeled beforehand. Instead, we used k-means clustering to separate the data into distinct groups, yielding these 7 categories, which will be discussed in the **Results** section
