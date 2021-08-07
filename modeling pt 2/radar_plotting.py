@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 
 # This function creates radar plots. Classes refers to a list that contains the names of each player class,
 # year refers to the season you want to look at and good/bad/average give you the option of which teams you want
-# shown on the radar plot
+# shown on the radar plot. You can choose a combination of any years. To view all years, enter "[0]"
 
 def plot_radar(classes, years=[2015,2016,2017,2018,2019,2020], good=True, bad=True, average=False, semisup=True):
         
