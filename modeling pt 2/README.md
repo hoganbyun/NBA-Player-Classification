@@ -58,10 +58,6 @@ Clustering showed that 6 groups provided the best balance of intra and inter clu
 * **High-Usage Big** - Scores a lot, rebounds well, takes a lot of shots inside the paint at a high percentage
 
 Our final model was trained on the newly labeled data. Several classification methods (Random Forest, XGBoost, SVM, etc.) were utilized and optimized to narrow down to a best-fit model, the best results coming from neural networks.
-EDITED UP TO HERE
-
-### Unsupervised Learning
-In **unsupervised learning**, players were not labeled beforehand. Instead, we used k-means clustering to separate the data into distinct groups, yielding these 7 categories, which will be discussed in the **Results** section
 
 * This project will be following the OSEMN data-science process
 
@@ -79,6 +75,9 @@ There is no doubt that recent years have seen a boom in 3-point shooting. Teams 
 ![intro_plots.png](./figures/intro_plots.png)
 
 Above show the recent trends in shot location, some with more detail than others.
+
+
+EDITED UP TO HERE
 
 ## Results
 ### Semi-Supervised Learning
