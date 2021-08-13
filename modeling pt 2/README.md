@@ -77,11 +77,9 @@ There is no doubt that recent years have seen a boom in 3-point shooting. Teams 
 Above show the recent trends in shot location, some with more detail than others.
 
 
-EDITED UP TO HERE
-
 ## Results
 ### Semi-Supervised Learning
-As mentioned above, this method required two stages of modeling. The first stage was trained on the 352 pre-labeled players yielding these results
+Our best model ended up being a neural network, which gave us training accuracy of 97.3% and test accuracy of 94.2%.
 
 ![phase1_metrics.png](./figures/semisupervised/phase1_metrics.png)
 
