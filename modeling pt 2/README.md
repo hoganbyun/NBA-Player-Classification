@@ -78,7 +78,6 @@ Above show the recent trends in shot location, some with more detail than others
 
 
 ## Results
-### Semi-Supervised Learning
 Our best model ended up being a neural network, which gave us training accuracy of 97.3% and test accuracy of 94.2%.
 
 ![phase1_metrics.png](./figures/semisupervised/phase1_metrics.png)
