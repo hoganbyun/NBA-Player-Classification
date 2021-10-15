@@ -64,14 +64,14 @@ Our final model was trained on the newly labeled data. Several classification me
 Before we get into the results, there are a few things that need to be mentioned:
 
 ### Dealing with Multiple Seasons of the Same Player
-![background.png](./figures/background.png)
+![background.png](./figures2/background.png)
 
 The graphic from our powerpoint above shows two interesting points. **1)** A player's position does not determine the player's playstyle. **2)** A player may not play the same way throughout his career. A prime example is Brook Lopez who in one year raised the number of 3-pointers he shot by around **2500%**! In one season, he went from a *Traditional Big* to a *Stretch Big*. In order to account for this, each season of a player counted as separate players. In other words, 2015 Brook Lopez and 2016 Brook Lopez were counted as different players in our model. This process was repeated for each player from 2015-2021, which also helps in giving us more data to work with.
 
 ### 3-Point Era
 There is no doubt that recent years have seen a boom in 3-point shooting. Teams started to realize that rather than shooting a midrange shot for 2 points, it is much more efficient to take a few steps back and shoot for 3 points. We can see that there has been a constant increas in 3-point shots and a corresponding decrease in 2-point shots. The big turning point was thought to be in following the 2014-15 season, when **1)** Stephen Curry, who is widely considered to be the best shooter ever, won his first MVP, **2)** his team, the Golden State Warriors finished with the best 3-point percentage in the NBA (39.8%) and **3)** the Warriors finished with the record in the NBA (67-15) and were NBA champions. The Warriors would continue to find great success as a team built on shooting 3-pointers.
 
-![intro_plots.png](./figures/intro_plots.png)
+![intro_plots.png](./figures2/intro_plots.png)
 
 Above show the recent trends in shot location, some with more detail than others.
 
