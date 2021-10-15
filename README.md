@@ -6,7 +6,6 @@ Author: Hogan Byun
 
 The game of basketball has certainly evolved over time. Point guards are no longer relagated to just passing duties, centers are no longer just tall players who post-up and rebound. As a result, classifying players by position starts to become less relevant as teams move into an era of "positionless" basketball, where players are asked to play and guard multiple positions. This project provides different ways to classify players into playstyles rather than the traditional five positions (PG, SG, SF, PF, C). Using these classifications, NBA teams can find a better understanding of the types of players that succesful teams have and unsuccessful teams lack. This can prove to be useful to teams that want to identify initial steps to improve their rosters.
 
-* This project has been updated in the "modeling pt 2" folder.
 
 ## The Data
 
@@ -47,24 +46,17 @@ In total, there were 3,067 player seasons used for this project. These players i
 ## Methods
 ### Semi-Supervised Learning
 
-This project analyzes NBA player statistics to claassify players into distinct playstyles/classes. Two methods were implemented in this project, semi-supervised and unsupervised learning. 
+This project analyzes NBA player statistics to claassify players into distinct playstyles/classes. This project used **semi-supervised learning**, which is a combination of **unsupervised** and **supervised** learning. Using k-means clustering, the players were separate into groups, after which, labels were given based on the average stats of each group.
 
-In **semi-supervised learning**, labels were predetermined, those being the following 11 playstyles:
-* **Pass-First Guard** - High assist rate, not a primary scorer, tends to be shorter in height
-* **Stretch Big** - Shoots 3-pointers and rebounds well, taller height
-* **Traditional Big** - High rebound and block rate, mainly shoots from close range
-* **Perimeter Scorer** - Shoots a lot of 3-pointers and makes them at an above average rate
-* **High Usage Big** - Big man with a high usage rate, scores a lot of points and is an above average facilitator
-* **Ball Dominant Scorer** - The "number 1" option on a team, go-to scorer who also handles the ball and runs the offense
-* **Athletic Slasher** - High drive and close shot rate, can shoot 3-pointers but does so at a below average level
-* **Volume Scorer** - Shoots a lot though not always efficiently, minimal contributions elsewhere
-* **Versatile Role Player** - Role player who contributes everywhere but does not excel in any area
-* **Role Player** - Does not have enough counting statistics to be classified somewhere
+Clustering showed that 6 groups provided the best balance of intra and inter cluster separation. Those being:
+* **Ball-Dominant Scorer** - "Best" player on a team, main contributor in anything offensive related
+* **Role Player** - Contributes but does not excel in any area
+* **Stretch Big** - Shoots more 3PT and drives in more than a traditional big in exchange for less rebounds
+* **Traditional Big** - Rebounds and blocks shots well, rarely shoots and almost exclusively takes shots inside
+* **Secondary Guard** - Drives and assists with above average 3PT shooting, shortest average height
+* **High-Usage Big** - Scores a lot, rebounds well, takes a lot of shots inside the paint at a high percentage
 
-These labels were manually applied to 352 players based on my own opinion. I made sure to have at least 30 and less than 40 of each playstyle in the 352 players. The model was trained on this data, after which, label predictions were made and applied to the remaining unlabeled players to create a fully-labeled dataset. Our final model was trained on that dataset. Several classification methods (Random Forest, XGBoost, SVM, etc.) were utilized and optimized to narrow down to a best-fit model, and on both occasions, XGBoost yielded the best results.
-
-### Unsupervised Learning
-In **unsupervised learning**, players were not labeled beforehand. Instead, we used k-means clustering to separate the data into distinct groups, yielding these 7 categories, which will be discussed in the **Results** section
+Our final model was trained on the newly labeled data. Several classification methods (Random Forest, XGBoost, SVM, etc.) were utilized and optimized to narrow down to a best-fit model, the best results coming from neural networks.
 
 * This project will be following the OSEMN data-science process
 
@@ -83,66 +75,22 @@ There is no doubt that recent years have seen a boom in 3-point shooting. Teams 
 
 Above show the recent trends in shot location, some with more detail than others.
 
+
 ## Results
-### Semi-Supervised Learning
-As mentioned above, this method required two stages of modeling. The first stage was trained on the 352 pre-labeled players yielding these results
+Our best model ended up being a neural network, which gave us training accuracy of 97.3% and test accuracy of 94.2%. Our loss came out to be 0.0926.
 
-![phase1_metrics.png](./figures/semisupervised/phase1_metrics.png)
+We can see that although we started out with around the same number of each class, there are definitely more of one class than others, that being class 1 (Role Player). This makes sense because an NBA team only has 5 starters and a few bench players that earn enough minutes to contribute enough to be classified. However, an average NBA team has 12 players, of which, quite a few may not receive enough minutes to be classified. 
 
-Here, micro, macro, and weighted are three different ways to measure the respective metrics. **Micro** aggregates contributions of all classes to get an average metric, **Macro** independently calculates metrics for each class, then averages them, and **Weighted** independently calculates metrics for each class, then averages them after giving weights corresponding to each class’ proportion in the dataset. What is evident is that all the numbers are pretty similar, generally falling within the 76-78% range. While this accuracy is not perfect, it is respectable for a dataset of 352, as it reached our minimum 70% accuracy goal.
-
-Our second stage uses the original dataset after using our stage 1 model to label everyone else. Our results were as followed:
- 
-![phase2_metrics.png](./figures/semisupervised/phase2_metrics.png)
-
-The 82% accuracy also was able to exceed our 80% accuracy goal. Below is the confusion matrix,
-
-![phase2_confusion.png](./figures/semisupervised/phase2_confusion.png)
-
-We can see that although we started out with around the same number of each class, there are definitely more of one class than others, that being class 10 (Role Player). This makes sense because an NBA team only has 5 starters and a few bench players that earn enough minutes to contribute enough to be classified. However, an average NBA team has 12 players, of which, quite a few may not receive enough minutes to be classified. 
-
-![phase2_features.png](./figures/semisupervised/phase2_features.png)
-
-From the feature importance plot, we can see that points scored had an overwhelming effect on how these players were classified. Other strong features were post-ups, assist percentage, and 3PA.
+![playstyle_distribution.png](./figures2/playstyle_distribution.png)
 
 The main goal of this project was to provide insight on how good and bad teams differ. 
 
-![ss_radar_all.png](./figures/semisupervised/ss_radar_all.png)
+![all_years.png](./figures2/all_years.png)
 
-Looking at the radar plot, we can see that good teams tend to have more ball-dominant scorers and versatility in role players, while bad teams tend to have more athletic slashers, volume scorers, and pass-first guards. This shows that to be successful, a team needs at least 1 ball-dominant scorer to run the offense. As seen in recent years, spacing is golden, and we can see that bad teams tend to have more slashers. 
-
-*Yearly plots are available in the "figures" folder while an option to view average teams as well is available in the plotting function.
-
-### Unsupervised Learning
-This method only requires 1 stage of modeling. In order to find the ideal number of clusters, we used several metrics. 
-
-![kmeans_sil.png](./figures/unsupervised/kmeans_sil.png)
-
-The silhouette score measures the average distance between each point in a cluster ie. how distinct and well-distinguished is each cluster from the other. We are looking for a way to classify beyond the 5 position system, thus we look for the best score that is greater than 5, which happens to be 7.
-
-![kmeans_WCSS.png](./figures/unsupervised/kmeans_WCSS.png)
-
-This next plot shows the within cluster sum of squares for kmeans models of different cluster ranges. The within-cluster sum of squares measures the variability of the observations within each cluster with a small sum of squares indicating a more compact cluster. In this case, we are looking for an "elbow" and while it is not as obvious as the silhouette score, we can see a slight elbow at 7 kmeans clusters. Now that we know we want 7 clusters, the model yielded these groups averages:
-
-![cluster_stats.png](./figures/unsupervised/cluster_stats.png)
-
-Using these stats, we came up with these labels:
-
-* **Role Player** - Contributes but does not excel in any area, mostly shoots catch-and-shoot 3s
-* **Pass-First Guard** - High assist rate, drives in a lot
-* **High-Usage Big** - Scores a lot, rebounds well, takes a lot of shots inside the paint at a high percentage
-* **Traditional Big** - Rebounds and blocks shots well, rarely shoots and almost exclusively takes shots inside
-* **Perimeter Scorer** - Takes a lot of 3-pointers (mostly catch-and-shoot), some contributions in other areas
-* **Athletic Wing** - Mostly takes shots/dunks from inside, only shoots catch-and-shoot 3s, rebounds well
-* **Ball-Dominant Scorer** - "Best" player on a team, main contributor in anything offensive related
-
-The corresponding radar plot is shown below:
-
-![kmeans_radar_all.png](./figures/unsupervised/kmeans_radar_all.png)
-
-From this, we can see that good teams tend to have more ball-dominant scorers while bad teams tend to have more slashers and pass-first guards, which is exactly what we saw with the semi-supervised model (versatile role players and volume scorers were not included in the 7 clusters).
+Looking at the radar plot, we can see that good teams tend to have more ball-dominant scorers and versatility in role players, while bad teams tend to have more secondary guards and stretch bigs. This does not necessarily show that a team with secondary guards and stretch bigs won't succeed. Rather, I believe this shows more about the importance of a Ball-Dominant Scorer and that in today's NBA, it is better to have a superstar surrounded by decent players, than a team with a better depth of good players. 
 
 *Yearly plots are available in the "figures" folder while an option to view average teams as well is available in the plotting function.
+
 
 ## Future Work
 
